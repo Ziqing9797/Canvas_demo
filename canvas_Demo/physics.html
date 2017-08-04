@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小球落地的物理实验</title>
+</head>
+<body>
+    <canvas id="canvas" style="border:1px solid black;display:block;margin: 50px auto;">
+        当前浏览器不支持Canvas，请更换浏览器后再试
+    </canvas>
+    <script>
+        //定义一个小球数组：x，y，半径，重力加速度，x方向速度，y方向速度，颜色
+        var ball = {x:512, y:100, r:20, g:2, vx:-4, vy:-10, color:"red"}
+        window.onload = function () {
+            var canvas = document.getElementById("canvas");
+
+            canvas.width = 1024
+            canvas.height = 768
+            var context = canvas.getContext("2d");
+
+            //定时器
+            setInterval(
+                function () {
+                    render(context);//画图
+                    update();//更新
+                },
+                50
+            )
+            function update() {
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+                ball.vy += ball.g;
+
+                //碰撞检测
+                if(ball.y >=768 - ball.r){
+                    ball.y = 768 - ball.r;
+                    ball.vy = -ball.vy*0.5;//加了一个摩擦系数0.5效果更逼真
+                }
+            }
+            function render(cxt) {
+                cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+
+                cxt.fillStyle = ball.color;
+                cxt.beginPath();
+                cxt.arc(ball.x, ball.y, ball.r, 0, 2*Math.PI);
+                cxt.closePath();
+
+                cxt.fill();
+            }
+        }
+    </script>
+</body>
+</html>
